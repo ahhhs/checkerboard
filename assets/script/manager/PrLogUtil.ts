@@ -22,9 +22,10 @@ export class PrLogUtil {
     public static logFun = {
         LEVEL1: false,
         LEVEL2: false,
-        LEVEL3: true,
+        LEVEL3: false,
         wenqian: false,
     };
+    static isAssert = true; //用于断言
     static logObj;
     public static setAuthority(value: number) {
         this.authority = value;
@@ -74,48 +75,55 @@ export class PrLogUtil {
         }
         return () => {};
     }
+    /**
+     * 断言某个对象一定为空
+     * @param value 断言对象
+     * @param error 断言失败后的错误信息
+     */
+    public static AssertEmpty(value: any, error: string) {
+        if (this.isAssert === false) {
+            return;
+        }
+        if (value === null || value === undefined) {
+            return this.error(error);
+        }
+    }
     public static error(...value: any[]) {
         if (CC_EDITOR) {
             cc.error(value);
-        } else if (this.output(Authority.LEVEL3)) {
-            if (CC_DEBUG) {
-                let e = new Error();
-                return (this.logObj = console.error.bind(
-                    this,
-                    this.joint(this.getSpriteName(e)),
-                    ...value
-                ));
-            }
+        } else {
+            let e = new Error();
+            return (this.logObj = console.error.bind(
+                this,
+                this.joint(this.getSpriteName(e)),
+                ...value
+            ));
         }
         return () => {};
     }
     public static warn(...value: any[]) {
         if (CC_EDITOR) {
             cc.warn(value);
-        } else if (this.output(Authority.LEVEL3)) {
-            if (CC_DEBUG) {
-                let e = new Error();
-                return (this.logObj = console.warn.bind(
-                    this,
-                    this.joint(this.getSpriteName(e)),
-                    ...value
-                ));
-            }
+        } else {
+            let e = new Error();
+            return (this.logObj = console.warn.bind(
+                this,
+                this.joint(this.getSpriteName(e)),
+                ...value
+            ));
         }
         return () => {};
     }
     public static trace(...value: any[]) {
         if (CC_EDITOR) {
             cc.log(value);
-        } else if (this.output(Authority.LEVEL3)) {
-            if (CC_DEBUG) {
-                let e = new Error();
-                return (this.logObj = console.trace.bind(
-                    this,
-                    this.joint(this.getSpriteName(e)),
-                    ...value
-                ));
-            }
+        } else {
+            let e = new Error();
+            return (this.logObj = console.trace.bind(
+                this,
+                this.joint(this.getSpriteName(e)),
+                ...value
+            ));
         }
         return () => {};
     }
@@ -187,8 +195,8 @@ export class PrLogUtil {
         let seconds = t.getSeconds();
         let milliseconds = t.getMilliseconds();
         return (
-            '-----------' +
-            '\n' +
+            //'-----------' +
+            //'\n' +
             '时间:' +
             hours +
             ':' +
