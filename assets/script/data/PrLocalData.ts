@@ -2,7 +2,7 @@
  * Copyright (C) 2021, Flickering Inc. All rights reserved.
  * Author: wenqianqin (wenqianqin@flickering.ai)
  *
- * Description:
+ * Description: 本地缓存类
  */
 
 import { EnumLocalData, EnumMusicType } from './PrEnumData';
