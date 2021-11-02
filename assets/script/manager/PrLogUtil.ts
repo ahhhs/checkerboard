@@ -84,6 +84,21 @@ export class PrLogUtil {
         if (this.isAssert === false) {
             return;
         }
+
+        if (value !== null && value !== undefined) {
+            return this.error(error);
+        }
+    }
+    /**
+     * 断言某个对象一定不为空
+     * @param value 断言对象
+     * @param error 断言失败后的错误信息
+     */
+    public static AssertNotEmpty(value: any, error: string) {
+        if (this.isAssert === false) {
+            return;
+        }
+
         if (value === null || value === undefined) {
             return this.error(error);
         }

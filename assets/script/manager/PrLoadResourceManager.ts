@@ -11,6 +11,7 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export class PrLoadResouceManager {
     private static _instance: PrLoadResouceManager;
+    //存储以加载的资源数组
     private static loadList: Map<string, any> = new Map();
 
     public static get instance() {

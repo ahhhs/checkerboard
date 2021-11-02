@@ -38,8 +38,8 @@ export class PrMusicManager {
     }
     /**
      * 播放音效
-     * @param url
-     * @param audioName
+     * @param url 路径
+     * @param audioName 音效昵称
      */
     static playSound(url, audioName) {
         this.playSoundFunc(url, audioName, null);
@@ -80,7 +80,10 @@ export class PrMusicManager {
         //     cc.audioEngine.playEffect(UI.clickEffect, false);
         // }
     }
-
+    /**
+     * 判断当前是在哪个场景下
+     * 更改资源包的路径
+     */
     static setBundleUrl() {
         switch (cc.director.getRunningScene().name) {
             case 'test':
