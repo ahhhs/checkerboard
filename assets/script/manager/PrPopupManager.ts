@@ -7,16 +7,28 @@
 
 import { BaseModule } from '../common/base/BaseModule';
 import { BasePopupModule, IPopupData } from '../common/base/BasePopupModule';
+import { EnumModuleName } from '../data/PrEnumData';
 import { GG } from '../GG';
+import { PrLogUtil } from './PrLogUtil';
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export class PrPopupManager extends BaseModule {
+    private _instance: PrPopupManager;
+
+    public get instance() {
+        if (!this._instance) {
+            this._instance = new PrPopupManager();
+        }
+        return this._instance;
+    }
+
     //弹窗数组
     private windowArr: IPopupData[] = [];
     //正在显示的弹窗
     private showWindow: BasePopupModule = null;
+
     init(name: string) {
         super.init(name);
     }
@@ -34,7 +46,7 @@ export class PrPopupManager extends BaseModule {
         let prepareWindow: BasePopupModule = this.windowArr[
             this.windowArr.length - 1
         ] as BasePopupModule;
-        GG.Log.AssertNotEmpty(prepareWindow, '弹窗模块数据错误!');
+        GG.Info().AssertNotEmpty(prepareWindow, '弹窗模块数据错误!');
         if (prepareWindow === this.showWindow) {
             return;
         }
@@ -42,5 +54,10 @@ export class PrPopupManager extends BaseModule {
         this.showWindow = (this.windowArr.splice(1, this.windowArr.length) as BasePopupModule[])[0];
         this.showWindow.showPopup();
     }
-    updete() {}
+    clear() {
+        this.windowArr.forEach((node: BasePopupModule) => {
+            node.destroy();
+        });
+        this.windowArr = [];
+    }
 }

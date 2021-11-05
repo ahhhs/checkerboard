@@ -4,17 +4,18 @@
  * Description: 加载管理器
  */
 
+import { BaseModule } from '../common/base/BaseModule';
 import { GG } from '../GG';
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export class PrLoadResouceManager {
-    private static _instance: PrLoadResouceManager;
+export class PrLoadResouceManager extends BaseModule {
+    private _instance: PrLoadResouceManager;
     //存储以加载的资源数组
-    private static loadList: Map<string, any> = new Map();
+    private loadList: Map<string, any> = new Map();
 
-    public static get instance() {
+    public get instance() {
         if (!this._instance) {
             this._instance = new PrLoadResouceManager();
         }
@@ -26,23 +27,23 @@ export class PrLoadResouceManager {
      * @param asserts 资源name
      * @returns
      */
-    public static loadPrefab(url: string, asserts: string) {
+    public loadPrefab(url: string, asserts: string) {
         return new Promise<void>((res, rej) => {
             if (CC_EDITOR) {
-                this.editorLoad(GG.Path.ABFilePath + url + '/' + asserts + '.prefab');
+                this.editorLoad(GG.getPath().ABFilePath + url + '/' + asserts + '.prefab');
             } else {
                 cc.assetManager.loadBundle(url, (ell, bundle: cc.AssetManager.Bundle) => {
                     if (ell) {
-                        GG.Log.AssertEmpty(asserts, 'ab包加载失败')();
+                        GG.Info().AssertEmpty(asserts, 'ab包加载失败')();
                         rej();
                     } else {
                         bundle.load(asserts, (ell, asserts) => {
                             if (ell) {
-                                GG.Log.AssertEmpty(asserts, '加载失败')();
+                                GG.Info().AssertEmpty(asserts, '加载失败')();
                                 rej();
                             } else {
                                 if (asserts instanceof cc.Prefab) {
-                                    GG.Log.log1('加载预制体 ' + asserts.name + ' 成功...')();
+                                    GG.Info().log1('加载预制体 ' + asserts.name + ' 成功...')();
                                     this.loadList.set(asserts.name, asserts);
                                     res();
                                 }
@@ -58,12 +59,12 @@ export class PrLoadResouceManager {
      * @param url
      * @param resName
      */
-    public static loadPicRes(url: string, resName: string) {
+    public loadPicRes(url: string, resName: string) {
         return new Promise((res, rej) => {
             cc.assetManager.loadBundle(url, (err, bundle) => {
                 if (!err) {
                     bundle.load(resName, cc.SpriteFrame, (ell, ress) => {
-                        GG.Log.log1('加载图片资源' + ress + '成功')();
+                        GG.Info().log1('加载图片资源' + ress + '成功')();
                         res(ress);
                     });
                 }
@@ -75,7 +76,7 @@ export class PrLoadResouceManager {
      * @param url 路径
      * @param fileName 文件夹name
      */
-    public static loadPrefabs(url: string, fileName: string) {
+    public loadPrefabs(url: string, fileName: string) {
         return new Promise<void>((res) => {
             cc.assetManager.loadBundle(url, (ell, bundle: cc.AssetManager.Bundle) => {
                 bundle.loadDir(fileName, (ell, asserts) => {
@@ -93,12 +94,12 @@ export class PrLoadResouceManager {
      * @param musicName
      * @returns
      */
-    public static loadMusic(url: string, musicName: string) {
+    public loadMusic(url: string, musicName: string) {
         return new Promise((res, rej) => {
             cc.assetManager.loadBundle(url, (err, bundle) => {
                 if (!err) {
                     bundle.load(musicName, cc.AudioClip, (ell, asserts) => {
-                        GG.Log.log1('加载音频资源' + asserts + '成功')();
+                        GG.Info().log1('加载音频资源' + asserts + '成功')();
                         this.loadList.set(asserts.name, asserts);
                         res(asserts);
                     });
@@ -110,12 +111,12 @@ export class PrLoadResouceManager {
      * 获得加载列表
      * @returns
      */
-    public static getLoadList() {
+    public getLoadList() {
         return this.loadList;
     }
-    public static getLoadListItem(itemName: string) {
+    public getLoadListItem(itemName: string) {
         let data = this.loadList.get(itemName);
-        GG.Log.AssertEmpty(data, '缓存列表无数据')();
+        GG.Info().AssertEmpty(data, '缓存列表无数据')();
         return this.loadList.get(itemName);
     }
     /**
@@ -123,11 +124,11 @@ export class PrLoadResouceManager {
      * @param path
      * @param cb
      */
-    public static editorLoad(path: string, cb?: Function) {
+    public editorLoad(path: string, cb?: Function) {
         const fileUuid = Editor.assetdb.remote.urlToUuid(path);
         this.getAssetByUuid(fileUuid, cb);
     }
-    public static getAssetByUuid(uuid: string, cb?: Function) {
+    public getAssetByUuid(uuid: string, cb?: Function) {
         cc.assetManager.loadAny(uuid, (err, asset) => {
             if (cb) {
                 cb(err, asset);

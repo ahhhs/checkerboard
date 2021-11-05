@@ -5,13 +5,16 @@
  * Description:
  */
 
+import { GG } from '../../script/GG';
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export class HomeMain extends cc.Component {
-
-    onLoad() {}
-
+    onLoad() {
+        GG.instance.init();
+        GG.Info().log('哈哈')();
+    }
     start() {}
     // update (dt) {}
 }

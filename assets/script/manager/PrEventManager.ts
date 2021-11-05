@@ -5,6 +5,8 @@
  * Description: 事件管理器
  */
 
+import { BaseModule } from '../common/base/BaseModule';
+
 const { ccclass, property } = cc._decorator;
 
 export class Observers {
@@ -34,7 +36,7 @@ export class Observers {
 }
 
 @ccclass
-export class PrEventManager {
+export class PrEventManager extends BaseModule {
     private eventLIst = {};
     private static _instance: PrEventManager;
     public static get instance() {

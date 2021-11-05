@@ -1,39 +1,40 @@
 // import { LocalSave } from "../Facility/LocalSave";
 // import {UI} from "../UI/UI";
 
+import { BaseModule } from '../common/base/BaseModule';
 import { EnumMusicType } from '../data/PrEnumData';
 import { GG } from '../GG';
 
-export class PrMusicManager {
-    static audioID = -1; //声音的id
-    static bundleUrl: string = 'resources';
+export class PrMusicManager extends BaseModule {
+    audioID = -1; //声音的id
+    bundleUrl: string = 'resources';
     /**
      * 播放背景音乐
      */
-    static playBgMusic(url: string, musicName: string) {
+    playBgMusic(url: string, musicName: string) {
         let status: EnumMusicType = GG.LocaiData.getMusicData();
         if (status == EnumMusicType.On) {
-            let music = GG.MgrLoad.getLoadListItem(musicName);
+            let music = GG.getLoad().getLoadListItem(musicName);
             if (music) {
                 cc.audioEngine.stopAll();
-                PrMusicManager.audioID = cc.audioEngine.play(music, true, 1);
+                this.audioID = cc.audioEngine.play(music, true, 1);
             } else {
-                GG.MgrLoad.getLoadListItem(musicName) ||
-                    GG.MgrLoad.loadMusic(this.bundleUrl, url + '/' + musicName).then(
-                        (music: cc.AudioClip) => {
+                GG.getLoad().getLoadListItem(musicName) ||
+                    GG.getLoad()
+                        .loadMusic(this.bundleUrl, url + '/' + musicName)
+                        .then((music: cc.AudioClip) => {
                             cc.audioEngine.stopAll();
-                            PrMusicManager.audioID = cc.audioEngine.play(music, true, 1);
-                        }
-                    );
+                            this.audioID = cc.audioEngine.play(music, true, 1);
+                        });
             }
         }
     }
     /**
      * 停止背景音乐
      */
-    static stopBgMusic() {
-        if (PrMusicManager.audioID != -1) {
-            cc.audioEngine.stop(PrMusicManager.audioID);
+    stopBgMusic() {
+        if (this.audioID != -1) {
+            cc.audioEngine.stop(this.audioID);
         }
     }
     /**
@@ -41,7 +42,7 @@ export class PrMusicManager {
      * @param url 路径
      * @param audioName 音效昵称
      */
-    static playSound(url, audioName) {
+    playSound(url, audioName) {
         this.playSoundFunc(url, audioName, null);
     }
     /**
@@ -50,31 +51,31 @@ export class PrMusicManager {
      * @param audioName
      * @param func
      */
-    static playSoundFunc(url: string, audioName, cb: Function) {
+    playSoundFunc(url: string, audioName, cb: Function) {
         let status: EnumMusicType = GG.LocaiData.getMusicData();
         if (status == EnumMusicType.On) {
-            let music = GG.MgrLoad.getLoadListItem(audioName);
+            let music = GG.getLoad().getLoadListItem(audioName);
             if (music) {
                 let soundID = cc.audioEngine.playEffect(music, false);
                 cc.audioEngine.setFinishCallback(soundID, function () {
                     cb && cb();
                 });
             } else {
-                GG.MgrLoad.loadMusic(this.bundleUrl, url + audioName).then(
-                    (music: cc.AudioClip) => {
+                GG.getLoad()
+                    .loadMusic(this.bundleUrl, url + audioName)
+                    .then((music: cc.AudioClip) => {
                         let soundID = cc.audioEngine.playEffect(music, false);
                         cc.audioEngine.setFinishCallback(soundID, function () {
                             cb && cb();
                         });
-                    }
-                );
+                    });
             }
         }
     }
     /**
      * 点击的音效
      */
-    static playClickSound() {
+    playClickSound() {
         // let status = LocalSave.getSoundStatus();
         // if (status == 1) {
         //     cc.audioEngine.playEffect(UI.clickEffect, false);
@@ -84,7 +85,7 @@ export class PrMusicManager {
      * 判断当前是在哪个场景下
      * 更改资源包的路径
      */
-    static setBundleUrl() {
+    setBundleUrl() {
         switch (cc.director.getRunningScene().name) {
             case 'test':
                 this.bundleUrl = 'game';

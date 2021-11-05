@@ -1,3 +1,6 @@
+import { BaseModule } from '../common/base/BaseModule';
+import { IModule } from '../common/base/IModule';
+
 export enum Authority {
     LEVEL5 = 5,
     LEVEL4 = 4,
@@ -15,22 +18,22 @@ export enum Authority {
  * 示例: CrLogManagers.log1("输出log")();
  *      CrLogManagers.assignLog("Type","输出log")();
  */
-export class PrLogUtil {
-    // public static script = "";//脚本名字
-    public static authority: number = 2; //当前权限等级 数值越高 权限越高
-    public static isSpecified: boolean = false; //指定输出开关 true是指定 false不是
-    public static logFun = {
+export class PrLogUtil extends BaseModule {
+    // public  script = "";//脚本名字
+    public authority: number = 2; //当前权限等级 数值越高 权限越高
+    public isSpecified: boolean = false; //指定输出开关 true是指定 false不是
+    public logFun = {
         LEVEL1: false,
         LEVEL2: false,
         LEVEL3: false,
         wenqian: false,
     };
-    static isAssert = true; //用于断言
-    static logObj;
-    public static setAuthority(value: number) {
+    isAssert = true; //用于断言
+    logObj;
+    public setAuthority(value: number) {
         this.authority = value;
     }
-    public static log(...value: any[]) {
+    public log(...value: any[]) {
         if (CC_EDITOR) {
             cc.log(value);
         } else if (this.output(Authority.LEVEL1)) {
@@ -45,7 +48,7 @@ export class PrLogUtil {
         }
         return () => {};
     }
-    public static log1(...value: any[]) {
+    public log1(...value: any[]) {
         if (CC_EDITOR) {
             cc.log(value);
         } else if (this.output(Authority.LEVEL2)) {
@@ -60,7 +63,7 @@ export class PrLogUtil {
         }
         return () => {};
     }
-    public static log2(...value: any[]) {
+    public log2(...value: any[]) {
         if (CC_EDITOR) {
             cc.log(value);
         } else if (this.output(Authority.LEVEL3)) {
@@ -80,7 +83,7 @@ export class PrLogUtil {
      * @param value 断言对象
      * @param error 断言失败后的错误信息
      */
-    public static AssertEmpty(value: any, error: string) {
+    public AssertEmpty(value: any, error: string) {
         if (this.isAssert === false) {
             return;
         }
@@ -94,7 +97,7 @@ export class PrLogUtil {
      * @param value 断言对象
      * @param error 断言失败后的错误信息
      */
-    public static AssertNotEmpty(value: any, error: string) {
+    public AssertNotEmpty(value: any, error: string) {
         if (this.isAssert === false) {
             return;
         }
@@ -103,7 +106,7 @@ export class PrLogUtil {
             return this.error(error);
         }
     }
-    public static error(...value: any[]) {
+    public error(...value: any[]) {
         if (CC_EDITOR) {
             cc.error(value);
         } else {
@@ -116,7 +119,7 @@ export class PrLogUtil {
         }
         return () => {};
     }
-    public static warn(...value: any[]) {
+    public warn(...value: any[]) {
         if (CC_EDITOR) {
             cc.warn(value);
         } else {
@@ -129,7 +132,7 @@ export class PrLogUtil {
         }
         return () => {};
     }
-    public static trace(...value: any[]) {
+    public trace(...value: any[]) {
         if (CC_EDITOR) {
             cc.log(value);
         } else {
@@ -145,7 +148,7 @@ export class PrLogUtil {
     /**
      * 指定的log输出
      */
-    public static assignLog(logName: string, ...value: any[]) {
+    public assignLog(logName: string, ...value: any[]) {
         if (this.isExist(logName) && this.isSpecifiedInstructs(logName)) {
             if (CC_EDITOR) {
                 cc.log(value);
@@ -167,7 +170,7 @@ export class PrLogUtil {
      * @param i
      * @returns
      */
-    public static output(i) {
+    public output(i) {
         if (this.isSpecifiedInstruct(i)) {
             return true;
         } else {
@@ -177,7 +180,7 @@ export class PrLogUtil {
     /**
      * 判断权限类型
      */
-    public static isSpecifiedInstruct(instruct: number) {
+    public isSpecifiedInstruct(instruct: number) {
         if (!this.logFun['LEVEL' + instruct]) {
             return true;
         }
@@ -186,7 +189,7 @@ export class PrLogUtil {
     /**
      * 判断是否需要指定输出
      */
-    public static isSpecifiedInstructs(instruct: string) {
+    public isSpecifiedInstructs(instruct: string) {
         if (!this.logFun[instruct]) {
             return true;
         }
@@ -197,13 +200,13 @@ export class PrLogUtil {
      * @param logName
      * @returns
      */
-    public static isExist(logName: string) {
+    public isExist(logName: string) {
         if (this.logFun[logName] != null && this.logFun[logName] != undefined) {
             return true;
         }
         return false;
     }
-    public static joint(spriteName: string) {
+    public joint(spriteName: string) {
         let t = new Date();
         let hours = t.getHours();
         let minutes = t.getMinutes();
@@ -226,25 +229,25 @@ export class PrLogUtil {
             ' | '
         );
     }
-    public static getSpriteName(e) {
+    public getSpriteName(e) {
         let data1 = this.indexFunc(e.stack);
         let data2 = this.indexFunc2(e.stack);
 
         return this.sub(e.stack, data1, data2);
     }
-    public static indexFunc(string: string) {
+    public indexFunc(string: string) {
         let data = string.indexOf('at ') + 2;
         let data1 = string.indexOf('at ', data) + 2;
         let data2 = string.indexOf('at ', data + data1) + 2;
         return data2;
     }
-    public static indexFunc2(string: string) {
+    public indexFunc2(string: string) {
         let data = string.indexOf(' (') + 1;
         let data1 = string.indexOf(' (', data) + 1;
         let data2 = string.indexOf(' (', data1 + data) + 1;
         return data2;
     }
-    public static sub(str: string, value, value2) {
+    public sub(str: string, value, value2) {
         return str.substring(value, value2);
     }
 }

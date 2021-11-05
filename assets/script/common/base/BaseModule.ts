@@ -5,7 +5,6 @@
  * Description:基础模块
  */
 
-import { GG } from '../../GG';
 import { IModule } from './IModule';
 
 const { ccclass, property } = cc._decorator;
@@ -14,7 +13,6 @@ const { ccclass, property } = cc._decorator;
 export class BaseModule implements IModule {
     private name: string = null;
     init(name: string) {
-        GG.Log.AssertNotEmpty('昵称不能为空!', name);
         this.name = name;
     }
     updete(dt: number) {}

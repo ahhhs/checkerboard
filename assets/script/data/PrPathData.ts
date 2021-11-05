@@ -1,3 +1,5 @@
+import { BaseModule } from '../common/base/BaseModule';
+
 /*
  * Author: ahhh (new_q8@163.com)
  *
@@ -5,7 +7,7 @@
  */
 const { ccclass, property } = cc._decorator;
 @ccclass
-export class PrPathData {
+export class PrPathData extends BaseModule {
     // static HomeUIPaht = `db://assets/config/hallUIPath.json`; //大厅ui层json保存的路径
-    static ABFilePath = `db://assets/`; //ab包
+    ABFilePath = `db://assets/`; //ab包
 }
