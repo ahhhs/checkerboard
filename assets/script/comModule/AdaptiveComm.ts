@@ -13,6 +13,6 @@ export class AdaptiveComm extends cc.Component {
     onLoad() {
         this.node.width = cc.winSize.width;
         this.node.height = cc.winSize.height;
-        GG.Log.log2('查看节点尺寸width:', this.node.width, 'height', this.node.height)();
+        GG.Info().log2('查看节点尺寸width:', this.node.width, 'height', this.node.height)();
     }
 }

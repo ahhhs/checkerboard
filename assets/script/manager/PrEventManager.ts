@@ -38,13 +38,7 @@ export class Observers {
 @ccclass
 export class PrEventManager extends BaseModule {
     private eventLIst = {};
-    private static _instance: PrEventManager;
-    public static get instance() {
-        if (!this._instance) {
-            this._instance = new PrEventManager();
-        }
-        return this._instance;
-    }
+   
     /**
      * 注册
      */

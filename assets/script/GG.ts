@@ -15,16 +15,6 @@ import { PrMusicManager } from './manager/PrMusicManager';
 import { PrPopupManager } from './manager/PrPopupManager';
 import Util from './util/Util';
 export class GG {
-    // private static MgrLog = new PrLogUtil(); //日志
-    // private static MgrPath = new PrPathData(); //路径
-    // private static MgrEvent = new PrEventManager(); //事件管理器
-    // private static MgrLoad = new PrLoadResouceManager(); //加载管理器
-    // private static MgrMusic = new PrMusicManager(); //音频管理器
-    // private static MgrPopup = new PrPopupManager(); //弹窗管理器
-
-    static Util = Util; //工具
-    static LocaiData = PrLocalData; //本地缓存
-
     private static _instance: GG;
 
     public static get instance() {
@@ -37,6 +27,13 @@ export class GG {
 
     init() {
         this.addModuel(EnumModuleName.Log, PrLogUtil);
+        this.addModuel(EnumModuleName.Event, PrEventManager);
+        this.addModuel(EnumModuleName.Load, PrLoadResouceManager);
+        this.addModuel(EnumModuleName.Music, PrMusicManager);
+        this.addModuel(EnumModuleName.Path, PrPathData);
+        this.addModuel(EnumModuleName.Popup, PrPopupManager);
+        this.addModuel(EnumModuleName.LocalData, PrLocalData);
+        this.addModuel(EnumModuleName.Util, Util);
     }
     public addModuel<A extends IModule>(moduleName: string, M: new () => A) {
         let modules = new M();
@@ -70,15 +67,13 @@ export class GG {
     static getPopup() {
         return this.getModuleType<PrPopupManager>(EnumModuleName.Popup);
     }
+    static getLocalData() {
+        return this.getModuleType<PrLocalData>(EnumModuleName.LocalData);
+    }
+    static getUtil() {
+        return this.getModuleType<Util>(EnumModuleName.Util);
+    }
     static Info() {
         return this.getModuleType<PrLogUtil>(EnumModuleName.Log);
-    }
-    static Error(...data) {
-        let log = GG._instance.getModule(EnumModuleName.Log) as PrLogUtil;
-        if (log) {
-            return log.error(...data);
-        } else {
-            throw new Error(JSON.stringify(data));
-        }
     }
 }

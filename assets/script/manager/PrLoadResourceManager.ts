@@ -11,16 +11,9 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export class PrLoadResouceManager extends BaseModule {
-    private _instance: PrLoadResouceManager;
     //存储以加载的资源数组
     private loadList: Map<string, any> = new Map();
 
-    public get instance() {
-        if (!this._instance) {
-            this._instance = new PrLoadResouceManager();
-        }
-        return this._instance;
-    }
     /**
      * 加载预制体
      * @param url 路径

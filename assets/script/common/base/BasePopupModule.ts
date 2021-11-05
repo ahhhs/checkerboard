@@ -12,7 +12,6 @@ export interface IPopupData {
 
 export class BasePopupModule extends cc.Component implements IPopupData {
     popupNode: cc.Node = null;
-
     onLoad() {
         this.node.active = false;
     }

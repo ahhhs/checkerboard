@@ -12,7 +12,7 @@ export class PrMusicManager extends BaseModule {
      * 播放背景音乐
      */
     playBgMusic(url: string, musicName: string) {
-        let status: EnumMusicType = GG.LocaiData.getMusicData();
+        let status: EnumMusicType = GG.getLocalData().getMusicData();
         if (status == EnumMusicType.On) {
             let music = GG.getLoad().getLoadListItem(musicName);
             if (music) {
@@ -52,7 +52,7 @@ export class PrMusicManager extends BaseModule {
      * @param func
      */
     playSoundFunc(url: string, audioName, cb: Function) {
-        let status: EnumMusicType = GG.LocaiData.getMusicData();
+        let status: EnumMusicType = GG.getLocalData().getMusicData();
         if (status == EnumMusicType.On) {
             let music = GG.getLoad().getLoadListItem(audioName);
             if (music) {
@@ -89,6 +89,9 @@ export class PrMusicManager extends BaseModule {
         switch (cc.director.getRunningScene().name) {
             case 'test':
                 this.bundleUrl = 'game';
+                break;
+            case 'home':
+                this.bundleUrl = 'home';
                 break;
         }
     }

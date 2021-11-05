@@ -7,31 +7,17 @@
 
 import { BaseModule } from '../common/base/BaseModule';
 import { BasePopupModule, IPopupData } from '../common/base/BasePopupModule';
-import { EnumModuleName } from '../data/PrEnumData';
 import { GG } from '../GG';
-import { PrLogUtil } from './PrLogUtil';
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export class PrPopupManager extends BaseModule {
-    private _instance: PrPopupManager;
-
-    public get instance() {
-        if (!this._instance) {
-            this._instance = new PrPopupManager();
-        }
-        return this._instance;
-    }
-
     //弹窗数组
     private windowArr: IPopupData[] = [];
     //正在显示的弹窗
     private showWindow: BasePopupModule = null;
 
-    init(name: string) {
-        super.init(name);
-    }
     /**
      * 添加一个弹窗
      * @param module
